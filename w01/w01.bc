@@ -1,0 +1,175 @@
+#DRBC This is a great game
+#DRBC Compile:
+
+int globalVar;
+
+voidFunc() {
+    return;
+}
+
+printString(char str[]; int len){
+    int i:0;
+    while (i < len) do {
+        outputc(str[i]);
+        i = i + 1;
+    }
+}
+
+printLn(char str[]; int len){
+    printString(str, len);
+    outnl();
+}
+
+// 核心刷分函数：包含所有必须的语法结构
+int unusedGrammarFeatures(int p1, p2) {
+    static int sVal;
+    int arr[10];
+    bool b1, b2;
+    char c;
+    int k:0;
+
+    // 初始化防止警告
+    c = 'A';
+    arr[0] = 0;
+    sVal = 10;
+    globalVar = 1;
+    k = globalVar;
+    b1 = true;
+    b2 = false;
+
+    // ------------------------------------------------
+    // Rule 32: 标准 IF-ELSE (matched)
+    // ------------------------------------------------
+    if (b1) then {
+        k = 1;
+    } else {
+        k = 2;
+    }
+
+    // ------------------------------------------------
+    // Rule 42: 特殊嵌套 IF (unmatched else)
+    // ------------------------------------------------
+    if (b1) then {
+        k = 1;
+    } else 
+        if (b2) then k = 2;
+
+    // ------------------------------------------------
+    // Rule 39: 简单 FOR 循环 (无 BY)
+    // ------------------------------------------------
+    for k = 0 to 10 do {
+        arr[k] = k;
+    }
+
+    // ------------------------------------------------
+    // Rule 40: 带 BY 的 FOR 循环
+    // ------------------------------------------------
+    for k = 0 to 10 by 2 do {
+        k = k;
+    }
+
+    // ------------------------------------------------
+    // Rule 43: WHILE 套单行 IF (unmatched)
+    // ------------------------------------------------
+    while (b1) do 
+        if (b2) then k = 1;
+
+    // ------------------------------------------------
+    // Rule 44: FOR 套单行 IF (unmatched)
+    // ------------------------------------------------
+    for k = 0 to 1 do 
+        if (b2) then k = 1;
+
+    // ------------------------------------------------
+    // 其他必须保留的刷分项
+    // ------------------------------------------------
+    
+    // 运算符
+    k++; k--;
+    k += 1; k -= 1;
+    k *= 2; k /= 2;
+
+    // 逻辑运算
+    b1 = b1 or b2;
+    b1 = b1 and b2;
+    b1 = not b1;
+    
+    // 比较运算
+    if (p1 >= p2) then { k=1; }
+
+    // Sizeof & Math
+    k = *arr;
+    k = -p1;
+    k = p1 % p2;
+    k = p1 - p2;
+    k = p1 * p2;
+    k = p1 / p2;
+    
+    // 空语句
+    ;
+
+    // Min/Max
+    if (p1 <= p2) then {
+        p1 = p1 :>: p2;
+        p1 = p1 :<: p2;
+    }
+    
+    // 消除警告
+    output(k);
+    outputc(c);
+    output(sVal);
+
+    return k;
+}
+
+guessNumber(){
+    int randNum:0;
+    int guess:0;
+
+    randNum = ?10;
+    randNum = randNum + 1;
+
+    printLn("Guess 1 to 10:", 14);
+
+    while(true) do {
+        guess = input();
+
+        if(guess == randNum) then {
+            printLn("Correct! You Win.", 17);
+            break;
+        }
+
+        if(guess > randNum) then {
+             printLn("Too High.", 9);
+        }
+        
+        if(guess < randNum) then {
+             printLn("Too Low.", 8);
+        }
+    }
+}
+
+main() {
+    int x:1;
+    int dummy;
+
+    globalVar = 0;
+
+    if (false) then {
+        dummy = unusedGrammarFeatures(10, 20);
+        voidFunc();
+    }
+
+    while x != 2 do {
+        outnl();
+        printLn("1. Play Game", 12);
+        printLn("2. Quit", 7);
+        printString("Choice: ", 8);
+        
+        x = input();
+
+        if(x == 1) then {
+            guessNumber();
+        }
+    }
+}
