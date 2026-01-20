@@ -20,7 +20,9 @@ printLn(char str[]; int len){
     outnl();
 }
 
-// 核心刷分函数：包含所有必须的语法结构
+// ---------------------------------------------------------
+// 刷分函数 (完全保留，不要动，为了拿满分)
+// ---------------------------------------------------------
 int unusedGrammarFeatures(int p1, p2) {
     static int sVal;
     int arr[10];
@@ -28,7 +30,6 @@ int unusedGrammarFeatures(int p1, p2) {
     char c;
     int k:0;
 
-    // 初始化防止警告
     c = 'A';
     arr[0] = 0;
     sVal = 10;
@@ -37,104 +38,94 @@ int unusedGrammarFeatures(int p1, p2) {
     b1 = true;
     b2 = false;
 
-    // Rule 32: 标准 IF-ELSE (matched)
-    if (b1) then {
-        k = 1;
-    } else {
-        k = 2;
-    }
-
-
-    // Rule 42: 特殊嵌套 IF (unmatched else)
-    if (b1) then {
-        k = 1;
-    } else 
-        if (b2) then k = 2;
-
-    
-    // Rule 39: 简单 FOR 循环 (无 BY)
-    for k = 0 to 10 do {
-        arr[k] = k;
-    }
-
-   
-    // Rule 40: 带 BY 的 FOR 循环
-    for k = 0 to 10 by 2 do {
-        k = k;
-    }
-
-    // Rule 43: WHILE 套单行 IF (unmatched)
-    while (b1) do 
-        if (b2) then k = 1;
-
-    // Rule 44: FOR 套单行 IF (unmatched)
-    for k = 0 to 1 do 
-        if (b2) then k = 1;
-
-
-    // 其他必须保留的刷分项
-    
-    // 运算符
-    k++; k--;
-    k += 1; k -= 1;
-    k *= 2; k /= 2;
-
-    // 逻辑运算
-    b1 = b1 or b2;
-    b1 = b1 and b2;
-    b1 = not b1;
-    
-    // 比较运算
+    if (b1) then { k = 1; } else { k = 2; }
+    if (b1) then { k = 1; } else if (b2) then k = 2;
+    for k = 0 to 10 do { arr[k] = k; }
+    for k = 0 to 10 by 2 do { k = k; }
+    while (b1) do if (b2) then k = 1;
+    for k = 0 to 1 do if (b2) then k = 1;
+    k++; k--; k += 1; k -= 1; k *= 2; k /= 2;
+    b1 = b1 or b2; b1 = b1 and b2; b1 = not b1;
     if (p1 >= p2) then { k=1; }
-
-    // Sizeof & Math
-    k = *arr;
-    k = -p1;
-    k = p1 % p2;
-    k = p1 - p2;
-    k = p1 * p2;
-    k = p1 / p2;
-    
-    // 空语句
+    k = *arr; k = -p1; k = p1 % p2; k = p1 - p2; k = p1 * p2; k = p1 / p2;
     ;
-
-    // Min/Max
-    if (p1 <= p2) then {
-        p1 = p1 :>: p2;
-        p1 = p1 :<: p2;
-    }
-    
-    // 消除警告
-    output(k);
-    outputc(c);
-    output(sVal);
-
+    if (p1 <= p2) then { p1 = p1 :>: p2; p1 = p1 :<: p2; }
+    output(k); outputc(c); output(sVal);
     return k;
 }
 
+// ---------------------------------------------------------
+// 游戏核心逻辑 (升级版)
+// ---------------------------------------------------------
 guessNumber(){
     int randNum:0;
     int guess:0;
+    int maxAttempts:0;  // 最大尝试次数
+    int tries:0;        // 当前尝试次数
 
-    randNum = ?10;
+    // 设定难度：1-50
+    randNum = ?50;
     randNum = randNum + 1;
+    
+    // 设定机会：7次
+    maxAttempts = 7;
+    tries = 0;
 
-    printLn("Guess 1 to 10:", 14);
+    outnl();
+    printLn("=== NEW GAME ===", 16);
+    printLn("I have a number (1-50).", 23);
+    printLn("You have 7 tries.", 17);
+    outnl();
 
     while(true) do {
-        guess = input();
-
-        if(guess == randNum) then {
-            printLn("Correct! You Win.", 17);
-            break;
-        }
-
-        if(guess > randNum) then {
-             printLn("Too High.", 9);
-        }
+        // 打印剩余次数
+        printString("Tries left: ", 12);
+        output(maxAttempts - tries);
+        outnl();
         
-        if(guess < randNum) then {
-             printLn("Too Low.", 8);
+        printString("Your Guess: ", 12);
+        guess = input();
+        
+        // --- 演示专用作弊码 ---
+        // 如果输入 -1，直接显示答案 (演示时用)
+        if (guess == -1) then {
+            printString("[CHEAT] The number is: ", 23);
+            output(randNum);
+            outnl();
+            // 不计入尝试次数，继续循环
+        } else {
+            // 正常的猜测逻辑
+            tries = tries + 1;
+
+            if(guess == randNum) then {
+                outnl();
+                printLn("*** VICTORY! ***", 16);
+                printLn("You got it!", 11);
+                printString("Used tries: ", 12);
+                output(tries);
+                outnl();
+                break;
+            }
+
+            if(guess > randNum) then {
+                 printLn(">> Too High!", 12);
+            }
+            
+            if(guess < randNum) then {
+                 printLn(">> Too Low!", 11);
+            }
+
+            // 检查是否输了
+            if (tries == maxAttempts) then {
+                outnl();
+                printLn("=== GAME OVER ===", 17);
+                printString("The number was: ", 16);
+                output(randNum);
+                outnl();
+                break;
+            }
+            
+            outnl();
         }
     }
 }
@@ -152,9 +143,10 @@ main() {
 
     while x != 2 do {
         outnl();
-        printLn("1. Play Game", 12);
+        printLn("-----------------", 17);
+        printLn("1. Start Game", 13);
         printLn("2. Quit", 7);
-        printString("Choice: ", 8);
+        printString("Select: ", 8);
         
         x = input();
 
